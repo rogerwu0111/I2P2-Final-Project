@@ -81,11 +81,11 @@ namespace TA
             }
 
             // if pos is legal, update MainBoard. Note we need to update the wintag of subboard
-            //...
             m_ship_size.push_back(pos.first);
             m_ship_size.push_back(pos.second);
             m_size += 2;
             MainBoard.get(pos.first, pos.second) = tag;
+            checkPlayerWin(tag, MainBoard.sub(pos.first/3, pos.second/3));
 
             // tell enemy where you move
             enemy->queryWhereToPut(pos.first, pos.second);
@@ -97,7 +97,7 @@ namespace TA
         {
             // if there is a player win or the MainBoard is full, return true, else return false
             // if statement also updata wintag of MainBoard if there is a player win
-            if (checkPlayerWin(BoardInterface::Tag::O) || checkPlayerWin(BoardInterface::Tag::X)) return true;
+            if (checkPlayerWin(BoardInterface::Tag::O, MainBoard) || checkPlayerWin(BoardInterface::Tag::X, MainBoard)) return true;
             else{
                 // check if MainBoard is full. if not, return false, else return true
                 int i, j;
@@ -111,15 +111,15 @@ namespace TA
         }
 
         // This function is used to check if a player win.
-        bool checkPlayerWin(BoardInterface::Tag::T){ // Todo(finish)
+        bool checkPlayerWin(BoardInterface::Tag::T, BoardInterface& board){ // Todo(finish)
             int i, j;
 
             // check row
             for (i=0; i<3; ++i){
                 for (j=0; j<3; ++j){
-                    if (MainBoard.state(i, j) != BoardInterface::Tag::T) break;
+                    if (board.state(i, j) != BoardInterface::Tag::T) break;
                     if (j == 2){ // if j == 2, means state(i, j) == T for j = 0, 1, 2 since there is no break
-                        MainBoard.setWinTag(BoardInterface::Tag::T); 
+                        board.setWinTag(BoardInterface::Tag::T); 
                         return true;
                     }
                 }
@@ -128,9 +128,9 @@ namespace TA
             // check column
             for (i=0; i<3; ++i){
                 for (j=0; j<3; ++j){
-                    if (MainBoard.state(j, i) != BoardInterface::Tag::T) break;
+                    if (board.state(j, i) != BoardInterface::Tag::T) break;
                     if (j == 2){ // if j == 2, means state(j, i) == T for j = 0, 1, 2 since there is no break
-                        MainBoard.setWinTag(BoardInterface::Tag::T);
+                        board.setWinTag(BoardInterface::Tag::T);
                         return true;                        
                     }
                 }
@@ -138,18 +138,18 @@ namespace TA
 
             // check diagonal '\'
             for (i=0; i<3; ++i){
-                if (MainBoard.state(i, i) != BoardInterface::Tag::T) break;
+                if (board.state(i, i) != BoardInterface::Tag::T) break;
                 if (i == 2){ // if i == 2, means state(i, i) == T for i = 0, 1, 2 since there is no break;
-                    MainBoard.setWinTag(BoardInterface::Tag::T);
+                    board.setWinTag(BoardInterface::Tag::T);
                     return true; 
                 }
             }
 
             // check diagonal '/'
             for (i=0; i<3; ++i){
-                if (MainBoard.state(i, 2-i) != BoardInterface::Tag::T) break;
+                if (board.state(i, 2-i) != BoardInterface::Tag::T) break;
                 if (i == 2){ // if i == 2, means state(i, 2-i) == T for i = 0, 1, 2 since there is no break;
-                    MainBoard.setWinTag(BoardInterface::Tag::T);
+                    board.setWinTag(BoardInterface::Tag::T);
                     return true;
                 }
             }
