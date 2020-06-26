@@ -42,15 +42,20 @@ namespace TA
 
             while (!checkGameover()) { // play the game until game over 
                 round++;
-                AIInterface *first = nullptr;
-                AIInterface *second = nullptr;
-                BoardInterface::Tag tag = BoardInterface::Tag::O;
+                // Note m_P1 first and m_P2 secoond;
+                AIInterface *first = (round%2) ? m_P1 : m_P2;
+                AIInterface *second = (round%2) ? m_P2 : m_P1;
+                // Note m_P1 take 'O', m_P2 take 'X'
+                BoardInterface::Tag tag = (round%2) ? BoardInterface::Tag::O : BoardInterface::Tag::X;
 
-                if (!playOneRound(first, tag, second)) {
-                    
+                if (!playOneRound(first, tag, second)) { // if playOneRound is false, means the "first" player take a illegal move
+                    // one player is lose. show result
+                    //...
+                    return;
                 }
                 updateGuiGame();
-            } 
+            }
+            // game is end. show result
         } 
 
    private:
@@ -62,13 +67,24 @@ namespace TA
         bool playOneRound(AIInterface *user, BoardInterface::Tag tag, AIInterface *enemy) // Todo
         {
             auto pos = call(&AIInterface::queryWhereToPut, user, MainBoard); // calaculate a position
+
+            // check if pos is legal. if not, return false and the user lose
+            // need to check if the position has no tags occupied and the position is in the right subboard
+            if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) return false;
+
+            // if pos is legal, update MainBoard
+            //...
+
+            // tell enemy where you move
+            enemy->queryWhereToPut(pos.first, pos.second);
+
             return true;
         }
 
         bool checkGameover() // Todo (finish)
         {
             // if there is a player win or the MainBoard is full, return true, else return false
-            // if statement also updata wintag if there is a player win
+            // if statement also updata wintag of MainBoard if there is a player win
             if (checkPlayerWin(BoardInterface::Tag::O) || checkPlayerWin(BoardInterface::Tag::X)) return true;
             else{
                 // check if MainBoard is full. if not, return false, else return true
