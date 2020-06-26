@@ -73,11 +73,19 @@ namespace TA
             auto pos = call(&AIInterface::queryWhereToPut, user, MainBoard); 
 
             // check if pos is legal. if not, return false and the user lose
-            // need to check if the position has no tags occupied and the position is in the right subboard
+            /* need to check (1) if the position has no tags occupied 
+                             (2) the position is in the correct subboard */
             if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) return false;
             if (!m_ship_size.empty()){
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
-                if ((*it)%3 != pos.first/3 || (*(it+1))%3 != pos.second/3) return false;
+                if (MainBoard.sub(pos.first/3, pos.second/3).full()){
+                    // check if the position is in range
+                    if (pos.first < 0 || pos.first > 2 || pos.second < 0 || pos.second > 2) return false;
+                }
+                else{
+                    // check if position is in the correct subboard 
+                    if ((*it)%3 != pos.first/3 || (*(it+1))%3 != pos.second/3) return false;
+                }
             }
 
             // if pos is legal, update MainBoard. Note we need to update the wintag of subboard
