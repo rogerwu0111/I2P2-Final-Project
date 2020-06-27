@@ -40,7 +40,8 @@ public:
 
     std::pair<int,int> queryWhereToPut(TA::UltraBoard ultraboard) override
     {
-        
+        ++playFirst_count;
+        return the_initiative(ultraboard);
     }
 
     // This algorithm is used when we move first.
