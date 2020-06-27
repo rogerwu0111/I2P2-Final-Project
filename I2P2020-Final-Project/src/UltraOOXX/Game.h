@@ -81,7 +81,7 @@ namespace TA
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
                 if (MainBoard.sub(pos.first/3, pos.second/3).full()){ // in this case, position can be anywhere.
                     // check if the position is in range
-                    if (pos.first < 0 || pos.first > 2 || pos.second < 0 || pos.second > 2) return false;
+                    if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) return false;
                 }
                 else{
                     // check if position is in the correct subboard 
