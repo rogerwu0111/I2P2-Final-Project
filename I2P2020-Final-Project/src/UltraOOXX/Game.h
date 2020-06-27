@@ -123,15 +123,15 @@ namespace TA
         }
 
         // This function is used to check if a player win in a board. (can be Board or UltraBoard)
-        bool checkPlayerWin(BoardInterface::Tag::T, BoardInterface& board){ // Todo(finish)
+       bool checkPlayerWin(BoardInterface::Tag T, BoardInterface& board){ // Todo(finish)
             int i, j;
 
             // check row
             for (i=0; i<3; ++i){
                 for (j=0; j<3; ++j){
-                    if (board.state(i, j) != BoardInterface::Tag::T) break;
+                    if (board.state(i, j) != T) break;
                     if (j == 2){ // if j == 2, means state(i, j) == T for j = 0, 1, 2 since there is no break
-                        board.setWinTag(BoardInterface::Tag::T); 
+                        board.setWinTag(T); 
                         return true;
                     }
                 }
@@ -140,9 +140,9 @@ namespace TA
             // check column
             for (i=0; i<3; ++i){
                 for (j=0; j<3; ++j){
-                    if (board.state(j, i) != BoardInterface::Tag::T) break;
+                    if (board.state(j, i) != T) break;
                     if (j == 2){ // if j == 2, means state(j, i) == T for j = 0, 1, 2 since there is no break
-                        board.setWinTag(BoardInterface::Tag::T);
+                        board.setWinTag(T);
                         return true;                        
                     }
                 }
@@ -150,25 +150,25 @@ namespace TA
 
             // check diagonal '\'
             for (i=0; i<3; ++i){
-                if (board.state(i, i) != BoardInterface::Tag::T) break;
+                if (board.state(i, i) != T) break;
                 if (i == 2){ // if i == 2, means state(i, i) == T for i = 0, 1, 2 since there is no break;
-                    board.setWinTag(BoardInterface::Tag::T);
+                    board.setWinTag(T);
                     return true; 
                 }
             }
 
             // check diagonal '/'
             for (i=0; i<3; ++i){
-                if (board.state(i, 2-i) != BoardInterface::Tag::T) break;
+                if (board.state(i, 2-i) != T) break;
                 if (i == 2){ // if i == 2, means state(i, 2-i) == T for i = 0, 1, 2 since there is no break;
-                    board.setWinTag(BoardInterface::Tag::T);
+                    board.setWinTag(T);
                     return true;
                 }
             }
 
             // no Win
             return false;
-        }
+        } 
 
         bool prepareState()
         {
