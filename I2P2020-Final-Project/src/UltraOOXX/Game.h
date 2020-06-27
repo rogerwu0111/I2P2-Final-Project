@@ -42,6 +42,7 @@ namespace TA
 
             while (!checkGameover()) { // play the game until game over 
                 round++;
+                
                 // Note m_P1 first and m_P2 secoond;
                 AIInterface *first = (round%2) ? m_P1 : m_P2;
                 AIInterface *second = (round%2) ? m_P2 : m_P1;
@@ -78,7 +79,7 @@ namespace TA
             if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) return false;
             if (!m_ship_size.empty()){
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
-                if (MainBoard.sub(pos.first/3, pos.second/3).full()){
+                if (MainBoard.sub(pos.first/3, pos.second/3).full()){ // in this case, position can be anywhere.
                     // check if the position is in range
                     if (pos.first < 0 || pos.first > 2 || pos.second < 0 || pos.second > 2) return false;
                 }
@@ -88,12 +89,16 @@ namespace TA
                 }
             }
 
-            // if pos is legal, update MainBoard. Note we need to update the wintag of subboard
+            // if pos is legal, update MainBoard.
+            // m_ship_size is a vector store the previous move
+            /*Note we need to (1) update the wintag of subboard first an then
+                              (2) update the wintag of MainBoard*/
             m_ship_size.push_back(pos.first);
             m_ship_size.push_back(pos.second);
             m_size += 2;
             MainBoard.get(pos.first, pos.second) = tag;
             checkPlayerWin(tag, MainBoard.sub(pos.first/3, pos.second/3));
+            checkPlayerWin(tag, MainBoard);
 
             // tell enemy where you move
             enemy->queryWhereToPut(pos.first, pos.second);
@@ -104,8 +109,7 @@ namespace TA
         bool checkGameover() // Todo (finish)
         {
             // if there is a player win or the MainBoard is full, return true, else return false
-            // if statement also updata wintag of MainBoard if there is a player win
-            if (checkPlayerWin(BoardInterface::Tag::O, MainBoard) || checkPlayerWin(BoardInterface::Tag::X, MainBoard)) return true;
+            if (MainBoard.getWinTag() ==  BoardInterface::Tag::O|| MainBoard.getWinTag() ==  BoardInterface::Tag::X) return true;
             else{
                 // check if MainBoard is full. if not, return false, else return true
                 int i, j;
@@ -118,7 +122,7 @@ namespace TA
             }
         }
 
-        // This function is used to check if a player win.
+        // This function is used to check if a player win in a board. (can be Board or UltraBoard)
         bool checkPlayerWin(BoardInterface::Tag::T, BoardInterface& board){ // Todo(finish)
             int i, j;
 
