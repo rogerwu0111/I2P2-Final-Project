@@ -10,7 +10,7 @@
 
 class AI : public AIInterface
 {
-    // these two variables store the previous step enemy move
+    // the pair store the previous step enemy move
     std::pair<int,int> enemy_Move;
 
     TA::BoardInterface::Tag my_tag;
@@ -36,11 +36,12 @@ public:
     }
 
     // ultraboard is the state of current board
-    // Tag T is the player tag at that level
-    // height denotes the tree height we want
-    // index[] store the move we choose
     // pre_move store the previous enemy move
-    int alpha_beta_algorithm(TA::UltraBoard ultraboard, std::pair<int,int> pre_move, int height, int alpha, int beta, bool IsMaxLevel, int index[]){
+    // height is the current tree height in the recursion
+    // MAX_height denotes the tree height we want
+    // index[] store the move we choose
+    // return value is the weight of the step we choose
+    int alpha_beta_algorithm(TA::UltraBoard ultraboard, std::pair<int,int> pre_move, int height, int MAX_height, int alpha, int beta, bool IsMaxLevel, int index[]){
         int eval;
 
         if (height == 0){
@@ -71,13 +72,31 @@ public:
                             TA::BoardInterface::Tag pre_subboard_winTag = subboard.getWinTag();
                             TA::BoardInterface::Tag pre_ultraboard_winTag = ultraboard.getWinTag();
 
+                            // place a move on the board and evaluate.
                             subboard.get(i, j) = enemy_tag;                            
                             checkPlayerWin_(my_tag, subboard);
                             checkPlayerWin_(my_tag, ultraboard);
+
                             if (ultraboard.getWinTag() == my_tag) eval = INFINITY;
-                            //...
+                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>(i,j), height-1, MAX_height, alpha, beta, false, index);
+
+                            // restore original board state
+                            subboard.get(i, j) = TA::BoardInterface::Tag::None;
+                            subboard.setWinTag(pre_subboard_winTag);
+                            ultraboard.setWinTag(pre_ultraboard_winTag);
+                            
+                            if (eval > _max){
+                                eval = _max;
+                                if (height == MAX_height){
+                                    index[0] = (pre_move.first%3) * 3 + i;
+                                    index[1] = (pre_move.second%3) * 3 + j;
+                                }
+                            }
+                            if (_max > alpha) alpha = _max;
+                            if (alpha >= beta) break;
                         }
                     }
+                    if (j < 3) break;
                 }
             }
             return _max;
