@@ -44,11 +44,20 @@ namespace TA
                 round++;
                 
                 // Note m_P1 first and m_P2 secoond;
-                AIInterface *first = (round%2) ? m_P1 : m_P2;
-                AIInterface *second = (round%2) ? m_P2 : m_P1;
-
                 // Note m_P1 take 'O', m_P2 take 'X'
-                BoardInterface::Tag tag = (round%2) ? BoardInterface::Tag::O : BoardInterface::Tag::X;
+                AIInterface *first;
+                AIInterface *second;               
+                BoardInterface::Tag tag;
+                if (round%2){
+                    first = m_P1;
+                    second = m_P2;
+                    tag = BoardInterface::Tag::O;
+                }
+                else{
+                    first = m_P2;
+                    second = m_P1;
+                    tag = BoardInterface::Tag::X;
+                }
 
                 if (!playOneRound(first, tag, second)) { // if playOneRound is false, means the "first" player take a illegal move
                     // one player is lose. show result
