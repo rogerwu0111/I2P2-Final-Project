@@ -19,7 +19,14 @@ class AI : public AIInterface
 public:
     void init(bool order) override
     {
+        // playFirst initialize
         playFirst_count = 1;
+        int i, j;
+        for (i=0; i<3; ++i){
+            for (j=0; j<3; ++j){
+                playFirst_array[i][j] = false;
+            }
+        }
     }
 
     void callbackReportEnemy(int x, int y) override
