@@ -101,7 +101,7 @@ namespace TA
             checkPlayerWin(tag, MainBoard);
 
             // tell enemy where you move
-            enemy->queryWhereToPut(pos.first, pos.second);
+            enemy->callbackReportEnemy(pos.first, pos.second);
 
             return true;
         }
