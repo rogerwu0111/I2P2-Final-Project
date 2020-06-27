@@ -88,7 +88,7 @@ namespace TA
             if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) return false;
             if (!m_ship_size.empty()){
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
-                if (MainBoard.sub(pos.first/3, pos.second/3).full()){ // in this case, position can be anywhere.
+                if (MainBoard.sub((*it)%3, (*(it+1))%3).full()){ // in this case, position can be anywhere.
                     // check if the position is in range
                     if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) return false;
                 }
