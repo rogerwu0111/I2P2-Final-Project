@@ -107,6 +107,11 @@ namespace TA
             m_size += 2;
             MainBoard.get(pos.first, pos.second) = tag;
             checkPlayerWin(tag, MainBoard.sub(pos.first/3, pos.second/3));
+            if (MainBoard.sub(pos.first/3, pos.second/3).full() == true &&
+                MainBoard.sub(pos.first/3, pos.second/3).getWinTag() == BoardInterface::Tag::None) 
+            {
+                MainBoard.sub(pos.first/3, pos.second/3).setWinTag(BoardInterface::Tag::Tie);
+            }
             checkPlayerWin(tag, MainBoard);
 
             // tell enemy where you move
@@ -127,12 +132,15 @@ namespace TA
                         if (MainBoard.sub(i, j).full() == false) return false;
                     }
                 }
+                MainBoard.setWinTag(BoardInterface::Tag::Tie);
                 return true;
             }
         }
 
         // This function is used to check if a player win in a board. (can be Board or UltraBoard)
-       bool checkPlayerWin(BoardInterface::Tag T, BoardInterface& board){ // Todo(finish)
+       void checkPlayerWin(BoardInterface::Tag T, BoardInterface& board){ // Todo(finish)
+            if (board.getWinTag() != BoardInterface::Tag::None) return;
+            
             int i, j;
 
             // check row
