@@ -36,7 +36,7 @@ public:
 
         // playSecond initialize
         INF = 1000;
-        MAX_height = 4;
+        MAX_height = 3;
     }
 
     void callbackReportEnemy(int x, int y) override
