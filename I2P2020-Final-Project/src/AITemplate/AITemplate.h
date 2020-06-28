@@ -127,7 +127,6 @@ public:
         }
         TA::BoardInterface::Tag pre_subboard_winTag;
         TA::BoardInterface::Tag pre_ultraboard_winTag;
-        TA::Board subboard;
         int i, j;
         if (IsMaxLevel){
             int _max = -INF;
@@ -165,23 +164,23 @@ public:
                 }
             }
             else{ // we only can place a move in corresponding subboard
-                subboard = ultraboard.sub(pre_move.first%3, pre_move.second%3);
+                // subboard = ultraboard.sub(pre_move.first%3, pre_move.second%3);
                 for (i=0; i<3; ++i){
                     for (j=0; j<3; ++j){
-                        if (subboard.state(i, j) == TA::BoardInterface::Tag::None)
+                        if (ultraboard.sub(pre_move.first%3, pre_move.second%3).state(i, j) == TA::BoardInterface::Tag::None)
                         {
-                            pre_subboard_winTag = subboard.getWinTag();
+                            pre_subboard_winTag = ultraboard.sub(pre_move.first%3, pre_move.second%3).getWinTag();
                             pre_ultraboard_winTag = ultraboard.getWinTag();
 
-                            subboard.get(i, j) = TA::BoardInterface::Tag::X;                            
-                            checkPlayerWin_(TA::BoardInterface::Tag::X, subboard);
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).get(i, j) = TA::BoardInterface::Tag::X;                            
+                            checkPlayerWin_(TA::BoardInterface::Tag::X, ultraboard.sub(pre_move.first%3, pre_move.second%3));
                             checkPlayerWin_(TA::BoardInterface::Tag::X, ultraboard);
 
                             if (ultraboard.getWinTag() == TA::BoardInterface::Tag::X) eval = INF;
                             else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>((pre_move.first%3*3)+i, (pre_move.second%3)*3+j), height-1, alpha, beta, false, index);
 
-                            subboard.get(i, j) = TA::BoardInterface::Tag::None;
-                            subboard.setWinTag(pre_subboard_winTag);
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).get(i, j) = TA::BoardInterface::Tag::None;
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).setWinTag(pre_subboard_winTag);
                             ultraboard.setWinTag(pre_ultraboard_winTag);
 
                             if (eval > _max){
@@ -229,23 +228,23 @@ public:
                 }
             }
             else{
-                subboard = ultraboard.sub(pre_move.first%3, pre_move.second%3);
+                // subboard = ultraboard.sub(pre_move.first%3, pre_move.second%3);
                 for (i=0; i<3; ++i){
                     for (j=0; j<3; ++j){
-                        if (subboard.state(i, j) == TA::BoardInterface::Tag::None)
+                        if (ultraboard.sub(pre_move.first%3, pre_move.second%3).state(i, j) == TA::BoardInterface::Tag::None)
                         {
-                            pre_subboard_winTag = subboard.getWinTag();
+                            pre_subboard_winTag = ultraboard.sub(pre_move.first%3, pre_move.second%3).getWinTag();
                             pre_ultraboard_winTag = ultraboard.getWinTag();
 
-                            subboard.get(i, j) = TA::BoardInterface::Tag::O;                            
-                            checkPlayerWin_(TA::BoardInterface::Tag::O, subboard);
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).get(i, j) = TA::BoardInterface::Tag::O;                            
+                            checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard.sub(pre_move.first%3, pre_move.second%3));
                             checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard);
 
                             if (ultraboard.getWinTag() == TA::BoardInterface::Tag::O) eval = -INF;
                             else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>((pre_move.first%3)*3+i, (pre_move.second%3)*3+j), height-1, alpha, beta, true, index);
 
-                            subboard.get(i, j) = TA::BoardInterface::Tag::None;
-                            subboard.setWinTag(pre_subboard_winTag);
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).get(i, j) = TA::BoardInterface::Tag::None;
+                            ultraboard.sub(pre_move.first%3, pre_move.second%3).setWinTag(pre_subboard_winTag);
                             ultraboard.setWinTag(pre_ultraboard_winTag);
 
                             _min = std::min(_min, eval);
