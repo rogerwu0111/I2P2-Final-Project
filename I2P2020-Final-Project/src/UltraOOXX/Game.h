@@ -37,6 +37,7 @@ namespace TA
             if( !prepareState() ) return ; // run m_P1 init and m_P2 init
 
             //Todo: Play Game
+            MainBoard.setWinTag(BoardInterface::Tag::None);
             putToGui("Start the Game!!\n");
             updateGuiGame();
 
