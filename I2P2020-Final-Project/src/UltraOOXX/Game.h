@@ -94,7 +94,7 @@ namespace TA
                 putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
                 return false;
             }
-            
+
             // check if the position is in range
             if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) {
                 putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
@@ -164,7 +164,7 @@ namespace TA
                     if (board.state(i, j) != T) break;
                     if (j == 2){ // if j == 2, means state(i, j) == T for j = 0, 1, 2 since there is no break
                         board.setWinTag(T); 
-                        return true;
+                        return;
                     }
                 }
             }
@@ -175,7 +175,7 @@ namespace TA
                     if (board.state(j, i) != T) break;
                     if (j == 2){ // if j == 2, means state(j, i) == T for j = 0, 1, 2 since there is no break
                         board.setWinTag(T);
-                        return true;                        
+                        return;                        
                     }
                 }
             }
@@ -185,7 +185,7 @@ namespace TA
                 if (board.state(i, i) != T) break;
                 if (i == 2){ // if i == 2, means state(i, i) == T for i = 0, 1, 2 since there is no break;
                     board.setWinTag(T);
-                    return true; 
+                    return; 
                 }
             }
 
@@ -194,12 +194,12 @@ namespace TA
                 if (board.state(i, 2-i) != T) break;
                 if (i == 2){ // if i == 2, means state(i, 2-i) == T for i = 0, 1, 2 since there is no break;
                     board.setWinTag(T);
-                    return true;
+                    return;
                 }
             }
 
             // no Win
-            return false;
+            return;
         } 
 
         bool prepareState()
