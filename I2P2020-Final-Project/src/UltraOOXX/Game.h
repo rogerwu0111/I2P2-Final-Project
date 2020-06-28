@@ -94,15 +94,16 @@ namespace TA
                 putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
                 return false;
             }
+            
+            // check if the position is in range
+            if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) {
+                putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
+                return false;
+            }
+
             if (!m_ship_size.empty()){
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
-                if (MainBoard.sub((*it)%3, (*(it+1))%3).full()){ // in this case, position can be anywhere.
-                    // check if the position is in range
-                    if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) {
-                        putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
-                        return false;
-                    }
-                }
+                if (MainBoard.sub((*it)%3, (*(it+1))%3).full()){} // in this case, position can be anywhere.
                 else{
                     // check if position is in the correct subboard 
                     if ((*it)%3 != pos.first/3 || (*(it+1))%3 != pos.second/3){
