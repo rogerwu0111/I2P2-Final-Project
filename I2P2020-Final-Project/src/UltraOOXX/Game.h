@@ -37,7 +37,7 @@ namespace TA
             if( !prepareState() ) return ; // run m_P1 init and m_P2 init
 
             //Todo: Play Game
-            putToGui("Hello world %d\n", 123);
+            putToGui("Start the Game!!\n");
             updateGuiGame();
 
             while (!checkGameover()) { // play the game until game over 
