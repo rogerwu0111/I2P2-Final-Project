@@ -99,7 +99,11 @@ public:
                 return target;
             }
             else{
-                // restrict to secondary subboard
+                if (enemy_Move.first%3 == 1 && enemy_Move.second%3 == 1){
+                    target = std::pair<int,int>(playFirst_secondary_restrict.first*3+playFirst_restrict.first, playFirst_secondary_restrict.second*3+playFirst_restrict.second);
+                    if (ultraboard.get(target.first, target.second) == TA::BoardInterface::Tag::None) return target; // restrict to playFirst_restrict
+                    else return std::pair<int,int>(playFirst_secondary_restrict.first*4, playFirst_secondary_restrict.second*4); // restrict to playFirst_secondary_restrict
+                }
                 return std::pair<int,int>((enemy_Move.first%3) * 3 + playFirst_secondary_restrict.first, (enemy_Move.second%3) * 3 + playFirst_secondary_restrict.second);
             }
         }
