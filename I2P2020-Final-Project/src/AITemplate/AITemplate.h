@@ -183,8 +183,8 @@ public:
                             if (eval > _max){
                                 _max = eval;
                                 if (height = MAX_height){
-                                    index[0] = pre_move.first%3 + i;
-                                    index[1] = pre_move.second%3 + j;
+                                    index[0] = (pre_move.first%3)*3 + i;
+                                    index[1] = (pre_move.second%3)*3 + j;
                                 }
                             }
                             alpha = std::max(alpha, _max);
