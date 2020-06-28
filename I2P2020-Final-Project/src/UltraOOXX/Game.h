@@ -72,7 +72,7 @@ namespace TA
             // game is end. show result
             if (MainBoard.getWinTag() == BoardInterface::Tag::O) putToGui("player 1 win\n");
             else if (MainBoard.getWinTag() == BoardInterface::Tag::X) putToGui("player 2 win\n");
-            else if (MainBoard.getWinTag() == BoardInterface::Tag::Tie) putToGui("Tie");
+            else if (MainBoard.getWinTag() == BoardInterface::Tag::Tie) putToGui("Tie\n");
             else{}
         } 
 
