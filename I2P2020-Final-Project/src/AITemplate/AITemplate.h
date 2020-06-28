@@ -55,7 +55,7 @@ public:
             return the_initiative(ultraboard);
         }
         else{
-            int index[2];
+            int index[2] = {0, 0};
             alpha_beta_algorithm(ultraboard, enemy_Move, MAX_height, -INF, INF, true, index);
             return std::pair<int,int>(index[0], index[1]);
         }     
@@ -198,6 +198,61 @@ public:
         }
         else{
             int _min = INF;
+            if (ultraboard.sub(pre_move.first%3, pre_move.second%3).full()){
+                for (i=0; i<9; ++i){
+                    for (j=0; j<9; ++j){
+                        if (ultraboard.get(i, j) == TA::BoardInterface::Tag::None){
+                            pre_subboard_winTag = ultraboard.sub(i/3, j/3).getWinTag();
+                            pre_ultraboard_winTag = ultraboard.getWinTag();
+
+                            ultraboard.get(i, j) = TA::BoardInterface::Tag::O;                            
+                            checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard.sub(i/3, j/3));
+                            checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard);
+
+                            if (ultraboard.getWinTag() == TA::BoardInterface::Tag::O) eval = -INF;
+                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>(i, j), height-1, alpha, beta, true, index);
+
+                            ultraboard.get(i, j) = TA::BoardInterface::Tag::None;
+                            ultraboard.sub(i/3, j/3).setWinTag(pre_subboard_winTag);
+                            ultraboard.setWinTag(pre_ultraboard_winTag);
+
+                            _min = std::min(_min, eval);
+                            beta = std::min(beta, _min);
+                            if (alpha >= beta) break;
+                        }
+                    }
+                    if (j < 9) break;
+                }
+            }
+            else{
+                subboard = ultraboard.sub(pre_move.first%3, pre_move.second%3);
+                for (i=0; i<3; ++i){
+                    for (j=0; j<3; ++j){
+                        if (subboard.state(i, j) == TA::BoardInterface::Tag::None)
+                        {
+                            pre_subboard_winTag = subboard.getWinTag();
+                            pre_ultraboard_winTag = ultraboard.getWinTag();
+
+                            subboard.get(i, j) = TA::BoardInterface::Tag::O;                            
+                            checkPlayerWin_(TA::BoardInterface::Tag::O, subboard);
+                            checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard);
+
+                            if (ultraboard.getWinTag() == TA::BoardInterface::Tag::O) eval = -INF;
+                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>(pre_move.first%3 + i, pre_move.second%3 + j), height-1, alpha, beta, true, index);
+
+                            subboard.get(i, j) = TA::BoardInterface::Tag::None;
+                            subboard.setWinTag(pre_subboard_winTag);
+                            ultraboard.setWinTag(pre_ultraboard_winTag);
+
+                            _min = std::min(_min, eval);
+                            beta = std::min(beta, _min);
+                            if (alpha >= beta) break;
+                        }
+                    }
+                    if (j < 3) break;
+                }
+            }
+            return _min;
         }
     }
 
@@ -254,12 +309,6 @@ public:
     int evaluate(TA::UltraBoard &B){
         
         int value = 0;
-        if(B.getWinTag() == TA::BoardInterface::Tag::X){
-            return INF; 
-        }
-        if(B.getWinTag() == TA::BoardInterface::Tag::O){
-            return -INF; 
-        }
         for(int i = 0 ; i < 3; i++){
             for(int j = 0 ; j < 3; j++){
                 
