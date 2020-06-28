@@ -61,14 +61,19 @@ namespace TA
 
                 if (!playOneRound(first, tag, second)) { // if playOneRound is false, means the "first" player take a illegal move
                     // one player is lose. show result
-                    //...
+                    if (first == m_P1) putToGui("player 2 win\n");
+                    else if (first == m_P2) putToGui("player 1 win\n");
+                    else{}
                     return;
                 }
                 updateGuiGame();
             }
 
             // game is end. show result
-            //...
+            if (MainBoard.getWinTag() == BoardInterface::Tag::O) putToGui("player 1 win\n");
+            else if (MainBoard.getWinTag() == BoardInterface::Tag::X) putToGui("player 2 win\n");
+            else if (MainBoard.getWinTag() == BoardInterface::Tag::Tie) putToGui("Tie");
+            else{}
         } 
 
    private:
@@ -85,16 +90,25 @@ namespace TA
             // check if pos is legal. if not, return false and the user lose
             /* need to check (1) if the position has no tags occupied 
                              (2) the position is in the correct subboard */
-            if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) return false;
+            if (MainBoard.get(pos.first, pos.second) != BoardInterface::Tag::None) {
+                putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
+                return false;
+            }
             if (!m_ship_size.empty()){
                 std::vector<int>::iterator it = m_ship_size.end() - 2;
                 if (MainBoard.sub((*it)%3, (*(it+1))%3).full()){ // in this case, position can be anywhere.
                     // check if the position is in range
-                    if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) return false;
+                    if (pos.first < 0 || pos.first > 8 || pos.second < 0 || pos.second > 8) {
+                        putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
+                        return false;
+                    }
                 }
                 else{
                     // check if position is in the correct subboard 
-                    if ((*it)%3 != pos.first/3 || (*(it+1))%3 != pos.second/3) return false;
+                    if ((*it)%3 != pos.first/3 || (*(it+1))%3 != pos.second/3){
+                        putToGui("(%d,%d) is illegal\n", pos.first, pos.second);
+                        return false;
+                    } 
                 }
             }
 
