@@ -174,7 +174,7 @@ public:
                             checkPlayerWin_(TA::BoardInterface::Tag::X, ultraboard);
 
                             if (ultraboard.getWinTag() == TA::BoardInterface::Tag::X) eval = INF;
-                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>(pre_move.first%3 + i, pre_move.second%3 + j), height-1, alpha, beta, false, index);
+                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>((pre_move.first%3*3)+i, (pre_move.second%3)*3+j), height-1, alpha, beta, false, index);
 
                             subboard.get(i, j) = TA::BoardInterface::Tag::None;
                             subboard.setWinTag(pre_subboard_winTag);
@@ -238,7 +238,7 @@ public:
                             checkPlayerWin_(TA::BoardInterface::Tag::O, ultraboard);
 
                             if (ultraboard.getWinTag() == TA::BoardInterface::Tag::O) eval = -INF;
-                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>(pre_move.first%3 + i, pre_move.second%3 + j), height-1, alpha, beta, true, index);
+                            else eval = alpha_beta_algorithm(ultraboard, std::pair<int,int>((pre_move.first%3)*3+i, (pre_move.second%3)*3+j), height-1, alpha, beta, true, index);
 
                             subboard.get(i, j) = TA::BoardInterface::Tag::None;
                             subboard.setWinTag(pre_subboard_winTag);
